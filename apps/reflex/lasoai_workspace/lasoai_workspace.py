@@ -40,9 +40,9 @@ class DNAState(rx.State):
 
 def field(label: str, name: str, limit: int, rows: int = 4) -> rx.Component:
     return rx.vstack(
-        rx.el.label(label, html_for=f"dna-{name}", font_weight="600"),
+        rx.el.label(label, html_for=name, font_weight="600"),
         rx.text_area(
-            id=f"dna-{name}", name=name, default_value=DNAState.business[name],
+            id=name, name=name, default_value=DNAState.business[name],
             max_length=limit, min_height=f"{rows * 24 + 20}px", width="100%",
         ),
         align="stretch", width="100%", spacing="2",
