@@ -1,0 +1,10 @@
+{
+  "name": "LasoAI Reflex development",
+  "build": {"dockerfile": "Dockerfile"},
+  "features": {"ghcr.io/devcontainers/features/node:1": {"version": "22"}},
+  "remoteUser": "vscode",
+  "forwardPorts": [3000],
+  "portsAttributes": {"3000": {"label": "LasoAI Reflex private preview", "onAutoForward": "notify"}},
+  "postCreateCommand": "python3 scripts/setup_reflex.py",
+  "customizations": {"vscode": {"extensions": ["ms-python.python"], "settings": {"python.defaultInterpreterPath": "${workspaceFolder}/apps/reflex/.venv/bin/python"}}}
+}

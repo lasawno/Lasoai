@@ -1,0 +1,7 @@
+**/__pycache__/
+**/.venv/
+**/.web/
+**/.states/
+**/.env
+**/.env.*
+!**/.env.example

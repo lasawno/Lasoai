@@ -1,0 +1,10 @@
+# Local environments, generated output, and secrets
+**/.venv/
+**/.web/
+**/__pycache__/
+**/.states/
+**/reflex.db
+**/reflex.db-*
+**/.env
+**/.env.*
+!**/.env.example
