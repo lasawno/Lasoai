@@ -11,7 +11,7 @@ bash scripts/start-reflex.sh
 
 In another terminal: `bash scripts/verify-reflex.sh`. Open private port 3000. The startup script uses Reflex 0.10's single-port production build mode as a development preview. It does not deploy to permanent hosting.
 
-Status: scaffold and Codespaces configuration prepared. Package installation was blocked by this environment's network policy for pypi.org; no running Codespace, Reflex compile, rendered screenshot, or backend event round trip has been verified. Supabase is selected for future accounts/shared data but remains unconnected. The current server prototype is session-only, with no account authentication or durable customer storage. Keep ports private and use synthetic data.
+Status: one browser-to-Python name submission was verified in the existing private Codespace. This release adds portable JSON import and optional founder-owned Supabase storage. It remains a synthetic prototype, with no mandatory LasoAI login or database. Provider identity is separate from portable DNA. See [optional storage and test coverage](../../docs/optional-storage.md).
 
 Checks possible without installing Reflex:
 

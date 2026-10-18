@@ -60,7 +60,7 @@ class CompiledFormContractTests(unittest.TestCase):
             for child in getattr(component, 'children', []):
                 yield from walk(child)
         forms = [c for c in walk(index()) if hasattr(c, '_get_static_form_field_keys')]
-        self.assertEqual(len(forms), 1)
+        self.assertEqual(len(forms), 3)
         keys, dynamic = forms[0]._get_static_form_field_keys()
         self.assertFalse(dynamic)
         self.assertEqual(keys, set(LIMITS))

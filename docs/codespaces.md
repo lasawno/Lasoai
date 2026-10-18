@@ -33,13 +33,9 @@ Verify your own rendered snapshot: enter synthetic Business DNA, choose **Apply 
 
 If initialization fails, custom source/config is restored automatically. Correct the error and rerun setup. If metadata validation fails, inspect Codespaces environment-variable availability without printing tokens or secrets.
 
-## Supabase next
+## Optional storage
 
-Supabase is the chosen future service for Auth and shared Business DNA data. The current app has no Supabase client, authenticated session, tables, RLS policies, or account saves. Its Python form applies a draft to framework session state only. The published website's editor continues saving only in the browser.
-
-Next implementation requires selecting the Supabase project, supplying its URL and publishable key through repository-scoped Codespaces secrets, and adding session verification plus tenant/ownership-based RLS. Never use user-editable metadata to assign access. Test two separate users and a signed-out visitor for reads, writes, updates, and deletes before calling shared storage ready. No Supabase project or paid service is created by setup.
-
-Production hosting, OpenAI billing/keys, Whop checkout, credits, and workflow enforcement remain separate unfinished work.
+Founders own their login, database and hosting accounts. Supabase is one optional test connector, not mandatory centralized LasoAI storage. The core DNA file has no provider identity. Storage is disabled by default, with no automatic uploads. See [configuration, synthetic tests and verification limits](optional-storage.md).
 
 ## Official references checked October 18, 2026
 
