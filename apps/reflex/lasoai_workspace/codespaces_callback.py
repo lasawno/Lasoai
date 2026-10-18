@@ -21,4 +21,14 @@ class CodespacesCallbackRedirect:
                                     (b"content-length", b"0")]})
             await send({"type": "http.response.body", "body": b""})
             return
-        await self.app(scope, receive, send)
+        async def send_with_fresh_html(message):
+            if message.get("type") == "http.response.start":
+                headers = list(message.get("headers", []))
+                if any(k.lower() == b"content-type" and b"text/html" in v.lower() for k, v in headers):
+                    # HTML chooses the hashed frontend bundle. Revalidate the page
+                    # after a transport change instead of reusing an old client.
+                    headers = [(k,v) for k,v in headers if k.lower() != b"cache-control"]
+                    headers.append((b"cache-control", b"no-store"))
+                    message = {**message, "headers": headers}
+            await send(message)
+        await self.app(scope, receive, send_with_fresh_html)

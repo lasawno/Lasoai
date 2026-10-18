@@ -48,6 +48,11 @@ except ImportError:
 
 @unittest.skipIf(reflex is None, 'Reflex is not installed in this verification environment')
 class CompiledFormContractTests(unittest.TestCase):
+    def test_actual_server_enables_the_same_transport_as_configuration(self):
+        from reflex.config import get_config
+        from lasoai_workspace.lasoai_workspace import app
+        self.assertEqual(app.sio.eio.transports, [get_config().transport])
+
     def test_real_reflex_form_generates_only_schema_keys(self):
         from lasoai_workspace.lasoai_workspace import index
         def walk(component):

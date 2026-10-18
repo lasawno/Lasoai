@@ -25,6 +25,20 @@ class CallbackTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(headers[b'cache-control'],b'no-store')
                 self.assertEqual(messages[1]['body'],b'')
 
+    async def test_html_revalidates_but_asset_cache_policy_is_unchanged(self):
+        for content_type, expected in [(b"text/html; charset=utf-8", b"no-store"),
+                                       (b"application/javascript", b"public, max-age=31536000")]:
+            messages = []
+            async def upstream(scope, receive, send):
+                await send({"type":"http.response.start","status":200,
+                            "headers":[(b"content-type",content_type),
+                                       (b"cache-control",b"public, max-age=31536000")]})
+                await send({"type":"http.response.body","body":b"page"})
+            async def send(message): messages.append(message)
+            await CodespacesCallbackRedirect(upstream)({"type":"http","method":"GET","path":"/"},None,send)
+            self.assertEqual(dict(messages[0]['headers'])[b'cache-control'],expected)
+            self.assertEqual(messages[1]['body'],b'page')
+
     async def test_untrusted_redirect_parameters_cannot_leave_origin(self):
         for query in [b'redirect_to=https://evil.example',b'redirect_to=//evil.example',
                       b'redirect_to=%0d%0aX-Evil:yes',b'redirect_to=/auth-codespace']:

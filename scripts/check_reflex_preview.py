@@ -3,6 +3,7 @@
 No GitHub CLI, authentication secrets, port-visibility changes, or external calls.
 """
 import json
+from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import HTTPRedirectHandler, build_opener, urlopen
 
@@ -15,6 +16,12 @@ class NoRedirect(HTTPRedirectHandler):
 
 
 def main():
+    from reflex.config import get_config
+    config = get_config()
+    generated = json.loads(Path(".web/env.json").read_text())
+    assert config.transport == "polling", "Runtime configuration is not polling; use start-reflex.sh"
+    assert generated.get("TRANSPORT") == config.transport, "Compiled client transport differs; restart to rebuild"
+    print("PASS: current config and compiled client both select polling")
     with urlopen(BASE + "/ping", timeout=5) as response:
         assert response.status == 200
         assert json.loads(response.read(1024)) == "pong"
@@ -30,7 +37,13 @@ def main():
     else:
         raise AssertionError("Callback fix not loaded; expected HTTP 303")
     print("PASS: helper callback redirects safely to /")
-    with urlopen(BASE + "/_event/?EIO=4&transport=polling", timeout=5) as response:
+    try:
+        response = urlopen(BASE + "/_event/?EIO=4&transport=polling", timeout=5)
+    except HTTPError as error:
+        if error.code == 400:
+            raise AssertionError("Active listener rejects polling. It may be an old server process; run stop-reflex.py and restart.") from error
+        raise
+    with response:
         payload = response.read(8192).decode()
         assert payload.startswith("0"), "Expected Engine.IO handshake"
         handshake = json.loads(payload[1:])
