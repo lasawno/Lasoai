@@ -41,3 +41,15 @@ Admin fixture provisioning is intentionally separate from the customer adapter. 
 ## Browser stage
 
 `apps/reflex/tests/browser_optional_storage.py` is a Playwright smoke test for session apply, export and validated import in a running local Reflex preview. Run from the existing Codespace using a local HTTP origin to avoid GitHub private-port authentication. It does not test provider accounts. Playwright/browser installation is required separately; no new compute is created. Browser automation for this release remains unexecuted until the new app is compiled in the existing Codespace. Keep forwarded port 3000 private.
+
+## Runner diagnostic correction
+
+The original HTTP runner's generic failure could not identify the failed operation. Its `cleanup: complete` message also did not distinguish zero created accounts from successful cleanup. That output does not establish invalid credentials or a root cause.
+
+Runner v2 prints START, numeric HTTP status and PASS immediately for each fixed stage. FAIL reports only a predefined explanation and that stage's last HTTP status. It never prints provider response bodies/headers, URLs, user IDs, keys, passwords, tokens or arbitrary exception messages. Cleanup reports created/removed/remaining counts; unconfirmed cleanup makes the run fail. A 5xx, timeout or malformed response cannot count as authorization denial.
+
+Admin requests with modern `sb_secret_` keys now use only `apikey`; Authorization is reserved for real user JWTs or the supported legacy service-role JWT. Supabase's current API-key documentation identifies opaque API keys as non-JWT values. This corrects a compatibility issue in the previous runner but does not prove it caused the reported run's failure. The strict local-session logout and old-JWT denial assertions are unchanged: current Auth documentation says logout removes its session record, which the RLS predicate checks.
+
+Eight runner diagnostic regression tests pass locally, covering header construction, staged failures, immediate progress, secret redaction, strict assertions, outage classification and cleanup. These scripted fixtures do not constitute a successful real Auth/Data API run. Execute `python3 -m unittest discover -s tests -p live_storage_runner_test.py -v` from the repository root to repeat them. The same Codespace rerun command above fetches the updated runner without touching working edits.
+
+References: https://supabase.com/docs/guides/getting-started/api-keys and https://supabase.com/docs/guides/auth/sessions .
