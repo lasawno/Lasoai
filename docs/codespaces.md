@@ -27,9 +27,9 @@ Keep the server running. In a second terminal:
 bash scripts/verify-reflex.sh
 ```
 
-Open port **3000** from the **Ports** panel. Keep its visibility **Private**. Reflex 0.10's `--env prod` mode serves the UI and Python event backend on one port; using the production build mode here is only a private development preview, not a production deployment. The config derives the same-origin HTTPS API URL from Codespaces metadata so WebSocket traffic does not point to your laptop's localhost. Do not make a second backend port public to work around a connection error.
+Open port **3000** from the **Ports** panel. Keep its visibility **Private**. Reflex 0.10's `--env prod` mode serves the UI and Python event backend on one port; using the production build mode here is only a private development preview, not a production deployment. The config derives the same-origin HTTPS API URL from Codespaces metadata so event traffic does not point to your laptop's localhost. Codespaces uses Reflex's supported HTTP polling transport, preserving the private port while avoiding a failing WebSocket upgrade. Do not make a second backend port public to work around a connection error.
 
-Verify your own rendered snapshot: enter synthetic Business DNA, choose **Apply to server session**, capture the updated outline and status, and download the last applied JSON. Check browser console/network for failed Python event connections. A loaded page or successful `/ping` alone does not prove event round trips or data isolation. Do not enter real customer data yet.
+Verify your own rendered snapshot: enter synthetic Business DNA, choose **Apply to server session**, capture the updated outline and status, and download the last applied JSON. Check browser console/network for failed Python event connections. For the callback/WebSocket preview issue and safe update commands, see [preview fix](codespaces-preview-fix.md). A loaded page or successful `/ping` alone does not prove event round trips or data isolation. Do not enter real customer data yet.
 
 If initialization fails, custom source/config is restored automatically. Correct the error and rerun setup. If metadata validation fails, inspect Codespaces environment-variable availability without printing tokens or secrets.
 

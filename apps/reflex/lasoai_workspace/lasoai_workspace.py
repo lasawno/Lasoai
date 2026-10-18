@@ -3,9 +3,11 @@
 Keep local-only until authentication and tenant-scoped durable storage exist.
 """
 import json
+import os
 from typing import Any
 import reflex as rx
 from .dna import export_business, validate_business
+from .codespaces_callback import CodespacesCallbackRedirect
 
 
 class DNAState(rx.State):
@@ -98,5 +100,8 @@ def index() -> rx.Component:
     )
 
 
-app = rx.App(theme=rx.theme(appearance="dark", accent_color="violet"))
+app = rx.App(
+    theme=rx.theme(appearance="dark", accent_color="violet"),
+    api_transformer=CodespacesCallbackRedirect if os.getenv("CODESPACE_NAME") else None,
+)
 app.add_page(index, title="LasoAI — Reflex workspace")

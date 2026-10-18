@@ -12,7 +12,8 @@ def preview_settings(env: Mapping[str, str]) -> dict:
             raise ValueError("Codespaces forwarding metadata is missing or invalid.")
         origin = f"https://{name}-3000.{domain}"
         return {"backend_host": "0.0.0.0", "frontend_port": 3000, "backend_port": 3000,
-                "api_url": origin, "cors_allowed_origins": [origin]}
+                "api_url": origin, "cors_allowed_origins": [origin],
+                "transport": "polling"}
     # The supplied start script always uses Reflex 0.10 single-port mode.
     return {"backend_host": "127.0.0.1", "frontend_port": 3000, "backend_port": 3000,
             "api_url": "http://localhost:3000",

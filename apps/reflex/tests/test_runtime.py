@@ -15,6 +15,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(config['api_url'], 'https://sample-space-123-3000.app.github.dev')
         self.assertEqual(config['cors_allowed_origins'], [config['api_url']])
         self.assertEqual(config['backend_host'], '0.0.0.0')
+        self.assertEqual(config['transport'], 'polling')
         self.assertEqual(config['backend_port'], config['frontend_port'])
 
     def test_invalid_or_missing_metadata_fails_closed(self):
